@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animasi Perkalian Pecahan Interaktif - Comic Edition</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght=0,400;0,700;1,700&family=Paytone+One&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Palet Warna Estetik & Komik (CSS Variables) --- */
+        :root {
+            --c-blue: #48CAE4;    
+            --c-yellow: #FFD166;  
+            --c-green: #48A65B;   
+            --c-highlight-num-faded: rgba(255, 209, 102, 0.2); 
+            --c-highlight-den-faded: rgba(239, 71, 111, 0.2);  
+            --c-shadow-num: rgba(255, 209, 102, 0.3);
+            --c-shadow-den: rgba(239, 71, 111, 0.3);
+
+            --c-white: #FFFFFF;
+            --c-dark: #000000;    
+            --c-bg: #4EA8DE;      
+            --c-bg-dots: #3185B4; 
+            --c-primary: #FF3366; 
+            --c-play: #06D6A0;    
+            --c-comic-yellow: #FFD166; 
+            
+            --c-retro-red: #ED3847;
+
+            /* BARU: Warna untuk Desain 'By Mathnology' */
+            --c-mathnology-bg: #CAF0F8; /* Biru muda cerah */
+            --c-mathnology-border: #0077B6; /* Biru gelap untuk border */
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive, sans-serif; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; 
+            box-sizing: border-box;
+            
+            /* Latar Belakang Komik (Halftone Dots) */
+            background-color: var(--c-bg);
+            background-image: radial-gradient(var(--c-bg-dots) 15%, transparent 16%), radial-gradient(var(--c-bg-dots) 15%, transparent 16%);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+
+        .container {
+            background-color: var(--c-white);
+            width: 100%;
+            max-width: 950px; 
+            padding: 40px 45px;
+            border-radius: 12px;
+            border: 5px solid var(--c-dark);
+            box-shadow: 12px 12px 0px var(--c-dark); 
+            box-sizing: border-box;
+        }
+
+        /* --- Header & Titles --- */
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title-wrapper {
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            gap: 10px; 
+            margin-bottom: 5px;
+        }
+
+        .icon-container {
+            width: 75px; 
+            height: 75px;
+            animation: float-icon 3s ease-in-out infinite;
+        }
+
+        .icon-container svg { width: 100%; height: 100%; }
+
+        @keyframes float-icon {
+            0% { transform: translateY(0px) rotate(-3deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(-3deg); }
+        }
+
+        .main-title {
+            position: relative;
+            display: inline-block;
+            font-family: 'Paytone One', sans-serif; 
+            font-size: 56px;
+            color: var(--c-retro-red); 
+            margin: 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .main-title::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            -webkit-text-stroke: 8px var(--c-white);
+        }
+
+        .main-title::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -2;
+            -webkit-text-stroke: 15px var(--c-retro-red); 
+        }
+
+        .sub-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--c-dark);
+            margin: 5px 0 0 0;
+            /* MENGUBAH WARNA DESAIN 'BY MATHNOLOGY': Latar belakang jadi biru */
+            background-color: var(--c-mathnology-bg); 
+            display: inline-block;
+            padding: 2px 15px;
+            /* MENGUBAH WARNA DESAIN 'BY MATHNOLOGY': Border jadi biru gelap */
+            border: 3px solid var(--c-mathnology-border); 
+            border-radius: 20px;
+            transform: rotate(-2deg);
+            /* Menambahkan sedikit bayangan agar serasi dengan gaya komik */
+            box-shadow: 4px 4px 0px var(--c-mathnology-border);
+        }
+
+        /* --- Kotak Narasi (Penjelasan) --- */
+        .explanation-box {
+            background-color: var(--c-comic-yellow);
+            border: 4px solid var(--c-dark);
+            box-shadow: 6px 6px 0px var(--c-dark); 
+            padding: 16px 20px;
+            margin-bottom: 35px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--c-dark);
+            position: relative;
+        }
+        
+        .explanation-box::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50px;
+            border-width: 15px 15px 0 0;
+            border-style: solid;
+            border-color: var(--c-dark) transparent transparent transparent;
+        }
+
+        /* --- Math & Visuals Section --- */
+        .math-section {
+            display: grid;
+            grid-template-columns: 180px auto 180px auto 180px auto;
+            grid-template-rows: auto 180px;
+            gap: 20px 25px; 
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative; 
+        }
+
+        /* Desktop Grid Placements */
+        .item-frac1   { grid-column: 1; grid-row: 1; }
+        .item-grid1   { grid-column: 1; grid-row: 2; }
+        .item-op-mul1 { grid-column: 2; grid-row: 1; }
+        .item-op-mul2 { grid-column: 2; grid-row: 2; }
+        .item-frac2   { grid-column: 3; grid-row: 1; }
+        .item-grid2   { grid-column: 3; grid-row: 2; }
+        .item-op-eq1  { grid-column: 4; grid-row: 1; }
+        .item-op-eq2  { grid-column: 4; grid-row: 2; }
+        .item-frac3   { grid-column: 5; grid-row: 1; opacity: 0; transition: opacity 0.3s; }
+        .item-grid3   { grid-column: 5; grid-row: 2; position: relative; width: 180px; height: 180px; justify-self: center; }
+        .item-simp    { grid-column: 6; grid-row: 1; }
+
+        .fraction {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 38px;
+            font-weight: bold;
+            color: var(--c-dark);
+            align-self: center;
+            justify-self: center;
+        }
+
+        /* Input Number Styling */
+        .num-input {
+            width: 65px; 
+            text-align: center;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            border: 3px solid transparent; 
+            background: transparent;
+            color: var(--c-dark);
+            cursor: pointer;
+            -moz-appearance: textfield;
+            transition: all 0.2s ease-in-out;
+            padding: 4px 2px; 
+            box-sizing: content-box; 
+        }
+        
+        .num-input::-webkit-outer-spin-button,
+        .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .num-input:focus {
+            outline: none;
+            border: 3px solid var(--c-dark);
+            background-color: #EBF2FF;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0px var(--c-dark);
+            cursor: text;
+            transform: rotate(-3deg); 
+        }
+
+        .num-input:hover:not(:focus, .glow-num, .glow-den) { 
+            background-color: #eee; 
+            border-radius: 8px;
+        }
+
+        .numerator {
+            padding: 4px 5px 10px 5px; 
+            border-bottom: 4px solid var(--c-dark); 
+            transition: all 0.5s ease-in-out;
+            margin-bottom: 5px; 
+        }
+
+        .denominator {
+            padding: 0 5px;
+            transition: all 0.5s ease-in-out;
+            margin-top: 5px; 
+        }
+
+        span.numerator {
+            display: inline-block;
+            padding: 4px 7px 10px 7px; 
+            border-bottom: 4px solid var(--c-dark);
+            margin-bottom: 5px;
+            border-radius: 6px;
+        }
+        
+        span.denominator {
+            display: inline-block;
+            padding: 4px 7px;
+            margin-top: 5px;
+            border-radius: 6px;
+        }
+
+        .operator {
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--c-dark);
+            align-self: center;  
+            justify-self: center;
+            z-index: 1;
+        }
+
+        /* --- Grids Styling --- */
+        .grid-container {
+            width: 180px;
+            height: 180px;
+            border: 4px solid var(--c-dark); 
+            box-sizing: border-box;
+            background-color: var(--c-white);
+            display: grid;
+            justify-self: center;
+            overflow: hidden;
+            box-shadow: 6px 6px 0px var(--c-dark); 
+        }
+
+        .grid-cell { box-sizing: border-box; }
+        
+        .grid-target { 
+            border: 4px dashed #999; 
+            background-color: transparent; 
+            box-shadow: none;
+        }
+
+        .bg-color1 { background-color: var(--c-blue); }
+        .bg-color2 { background-color: var(--c-yellow); }
+        .bg-overlap { background-color: var(--c-green); }
+        .bg-white { background-color: var(--c-white); }
+
+        /* Highlight Menetap & Pudar */
+        .glow-num { 
+            background-color: var(--c-highlight-num-faded) !important; 
+            box-shadow: 0 0 10px var(--c-shadow-num); 
+            border-radius: 6px;
+            color: var(--c-dark) !important; 
+        }
+        
+        .glow-den { 
+            background-color: var(--c-highlight-den-faded) !important; 
+            box-shadow: 0 0 10px var(--c-shadow-den); 
+            border-radius: 6px;
+            color: var(--c-dark) !important; 
+        }
+
+        /* --- Ghost Elements --- */
+        .ghost {
+            position: absolute;
+            top: 0; left: 0;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10;
+            will-change: transform, opacity;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.5); 
+        }
+
+        /* --- Simplifikasi & Penjelasan --- */
+        .simplify-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            color: var(--c-dark); 
+        }
+        
+        .simplify-group .fraction { color: var(--c-dark); }
+        .simplify-group .numerator { border-bottom-color: var(--c-dark); }
+
+        /* --- Controls Section --- */
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Slider Gaya Komik */
+        input[type=range] {
+            -webkit-appearance: none;
+            flex-grow: 1;
+            height: 14px;
+            background: var(--c-white);
+            border: 3px solid var(--c-dark);
+            box-shadow: 4px 4px 0px var(--c-dark);
+            border-radius: 10px;
+            outline: none;
+            min-width: 150px;
+            max-width: 400px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: var(--c-comic-yellow);
+            border: 4px solid var(--c-dark);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); background: var(--c-primary); }
+
+        /* Tombol Gaya Komik */
+        .btn {
+            background-color: var(--c-primary);
+            color: var(--c-white);
+            border: 4px solid var(--c-dark);
+            box-shadow: 5px 5px 0px var(--c-dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Bangers', cursive;
+            font-size: 20px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        .btn:hover { 
+            background-color: #FF144A; 
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--c-dark);
+        }
+        
+        .btn:active { 
+            transform: translate(5px, 5px); 
+            box-shadow: 0px 0px 0px var(--c-dark);
+        }
+        
+        .btn-play { background-color: var(--c-play); color: var(--c-dark); }
+        .btn-play:hover { background-color: #05B586; }
+
+        /* --- Tampilan Optimal HP & Tablet (Responsiveness) --- */
+        @media (max-width: 800px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            .main-title { font-size: 38px; }
+            .main-title::before { -webkit-text-stroke: 6px var(--c-white); }
+            .main-title::after { -webkit-text-stroke: 10px var(--c-retro-red); }
+
+            .explanation-box {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
+            .explanation-box::after {
+                bottom: -12px;
+                left: 30px;
+                border-width: 12px 12px 0 0;
+            }
+
+            /* Layout Grid Khusus Mobile (2 Kolom Rapi) */
+            .math-section {
+                grid-template-columns: auto 180px; 
+                grid-template-rows: auto;
+                gap: 15px 20px;
+            }
+
+            .item-frac1   { grid-column: 1; grid-row: 1; }
+            .item-grid1   { grid-column: 2; grid-row: 1; }
+            .item-op-mul1 { grid-column: 1 / -1; grid-row: 2; margin: -5px 0; }
+            .item-op-mul2 { display: none; }
+            .item-frac2   { grid-column: 1; grid-row: 3; }
+            .item-grid2   { grid-column: 2; grid-row: 3; }
+            .item-op-eq1  { grid-column: 1 / -1; grid-row: 4; margin: -5px 0; }
+            .item-op-eq2  { display: none; }
+            .item-frac3   { grid-column: 1; grid-row: 5; }
+            .item-grid3   { grid-column: 2; grid-row: 5; }
+            .item-simp    { grid-column: 1 / -1; grid-row: 6; justify-content: center; margin-top: 10px; }
+            
+            .btn {
+                padding: 10px 18px;
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .math-section {
+                gap: 15px 10px;
+            }
+            input[type=range] { min-width: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header-section">
+        <div class="title-wrapper">
+            <div class="icon-container">
+                <svg id="piechart" viewBox="-150 -150 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <h1 class="main-title" data-text="PERKALIAN PECAHAN">PERKALIAN PECAHAN</h1>
+        </div>
+        <h2 class="sub-title">By Mathnology</h2>
+    </div>
+
+    <div class="explanation-box" id="explanation-text">
+        Masukkan angka (maks 10), lalu klik Play atau geser slider untuk melihat prosesnya!
+    </div>
+
+    <div class="math-section" id="math-section">
+        
+        <div class="fraction item-frac1">
+            <input type="number" class="num-input numerator" id="num1" value="3" min="1" max="10" onchange="handleInput()">
+            <input type="number" class="num-input denominator" id="den1" value="9" min="2" max="10" onchange="handleInput()">
+        </div>
+        <div class="grid-container item-grid1" id="grid1"></div>
+
+        <div class="operator item-op-mul1">&#215;</div>
+        <div class="operator operator-grid item-op-mul2">&#215;</div>
+
+        <div class="fraction item-frac2">
+            <input type="number" class="num-input numerator" id="num2" value="5" min="1" max="10" onchange="handleInput()">
+            <input type="number" class="num-input denominator" id="den2" value="6" min="2" max="10" onchange="handleInput()">
+        </div>
+        <div class="grid-container item-grid2" id="grid2"></div>
+
+        <div class="operator item-op-eq1">=</div>
+        <div class="operator operator-grid item-op-eq2">=</div>
+
+        <div class="fraction item-frac3" id="final-fraction">
+            <span class="numerator" id="num3">15</span>
+            <span class="denominator" id="den3">54</span>
+        </div>
+        <div class="item-grid3">
+            <div class="grid-container grid-target" id="grid3-target" style="position: absolute; top:0; left:0; width:100%; height:100%;"></div>
+            <div class="grid-container" id="grid3" style="position: absolute; top:0; left:0; opacity: 0; width:100%; height:100%;"></div>
+        </div>
+
+        <div class="simplify-group item-simp" id="simplified-display">
+            <div style="font-size: 38px; font-weight: bold; color: var(--c-dark); margin-top: -10px;">=&nbsp;</div>
+            <div class="fraction">
+                <span class="numerator" id="simp-num">5</span>
+                <span class="denominator" id="simp-den">18</span>
+            </div>
+        </div>
+
+        <div class="grid-container ghost" id="ghost1"></div>
+        <div class="grid-container ghost" id="ghost2"></div>
+
+    </div>
+
+    <div class="controls-section">
+        <div class="slider-row">
+            <button class="btn btn-play" id="playBtn" onclick="togglePlay()">&#9658; PLAY</button>
+            <input type="range" id="exploreSlider" min="0" max="100" value="0">
+            <button class="btn" onclick="generateNewFractions()">ACAK ANGKA!</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let f1 = { num: 3, den: 9 };
+    let f2 = { num: 5, den: 6 };
+    let playInterval;
+    let isPlaying = false;
+    let canSimplify = false;
+
+    window.onload = () => {
+        render();
+        setupSlider();
+        initPieChartIcon(); 
+        window.addEventListener('resize', () => requestAnimationFrame(updateAnimation));
+    };
+
+    function initPieChartIcon() {
+        const slicesData = [
+            { color: '#FFCE44', shadow: '#E2AF24' },
+            { color: '#3BC3A3', shadow: '#28A086' }, 
+            { color: '#EF5965', shadow: '#D14A56' }  
+        ];
+
+        let currentAngles = [0, 140, 250, 360]; 
+        let targetAngles = [...currentAngles];
+
+        function getArcPath(cx, cy, r, a1, a2) {
+            let rad1 = a1 * Math.PI / 180;
+            let rad2 = a2 * Math.PI / 180;
+            let x1 = cx + r * Math.cos(rad1);
+            let y1 = cy + r * Math.sin(rad1);
+            let x2 = cx + r * Math.cos(rad2);
+            let y2 = cy + r * Math.sin(rad2);
+            let largeArc = (a2 - a1) > 180 ? 1 : 0;
+            return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+        }
+
+        function renderIcon() {
+            const svg = document.getElementById('piechart');
+            if(!svg) return;
+            svg.innerHTML = ''; 
+            
+            for (let i = 0; i < 3; i++) {
+                let start = currentAngles[i];
+                let end = currentAngles[i+1];
+                let mid = (start + end) / 2;
+                
+                let explodeDistance = 12;
+                let tx = explodeDistance * Math.cos(mid * Math.PI / 180);
+                let ty = explodeDistance * Math.sin(mid * Math.PI / 180);
+                
+                let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('transform', `translate(${tx}, ${ty})`);
+                
+                let base = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                base.setAttribute('d', getArcPath(0, 0, 100, start, end));
+                base.setAttribute('fill', slicesData[i].color);
+                
+                let shadow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                shadow.setAttribute('d', getArcPath(0, 0, 40, start, end));
+                shadow.setAttribute('fill', slicesData[i].shadow);
+                
+                let stroke = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                stroke.setAttribute('d', getArcPath(0, 0, 100, start, end));
+                stroke.setAttribute('fill', 'none');
+                stroke.setAttribute('stroke', '#000000'); 
+                stroke.setAttribute('stroke-width', '10');
+                stroke.setAttribute('stroke-linejoin', 'round');
+                stroke.setAttribute('stroke-linecap', 'round');
+
+                g.appendChild(base);
+                g.appendChild(shadow);
+                g.appendChild(stroke);
+
+                let hStart = start + 12;
+                let hEnd = end - 12;
+                if (hEnd > hStart) {
+                    let highlight = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    let hx1 = 75 * Math.cos(hStart * Math.PI / 180);
+                    let hy1 = 75 * Math.sin(hStart * Math.PI / 180);
+                    let hx2 = 75 * Math.cos(hEnd * Math.PI / 180);
+                    let hy2 = 75 * Math.sin(hEnd * Math.PI / 180);
+                    let hLarge = (hEnd - hStart) > 180 ? 1 : 0;
+                    
+                    highlight.setAttribute('d', `M ${hx1} ${hy1} A 75 75 0 ${hLarge} 1 ${hx2} ${hy2}`);
+                    highlight.setAttribute('fill', 'none');
+                    highlight.setAttribute('stroke', '#FFFFFF');
+                    highlight.setAttribute('stroke-width', '6');
+                    highlight.setAttribute('stroke-linecap', 'round');
+                    g.appendChild(highlight);
+                }
+
+                svg.appendChild(g);
+            }
+        }
+
+        function animatePie() {
+            let isChanging = false;
+            for(let i = 0; i < 4; i++) { 
+                 let diff = targetAngles[i] - currentAngles[i];
+                 if (Math.abs(diff) > 0.1) {
+                     currentAngles[i] += diff * 0.05; 
+                     isChanging = true;
+                 } else {
+                     currentAngles[i] = targetAngles[i];
+                 }
+            }
+            renderIcon();
+            requestAnimationFrame(animatePie);
+        }
+
+        setInterval(() => {
+            let w1 = Math.random() + 0.3;
+            let w2 = Math.random() + 0.3;
+            let w3 = Math.random() + 0.3;
+            let totalWeight = w1 + w2 + w3;
+            
+            let angle1 = (w1 / totalWeight) * 360;
+            let angle2 = (w2 / totalWeight) * 360;
+            let angle3 = (w3 / totalWeight) * 360;
+            
+            let globalRotation = Math.random() * 90; 
+            
+            let newStart = targetAngles[0] + globalRotation;
+            
+            targetAngles[0] = newStart;
+            targetAngles[1] = newStart + angle1;
+            targetAngles[2] = newStart + angle1 + angle2;
+            targetAngles[3] = newStart + 360;
+
+        }, 2500);
+
+        animatePie();
+    }
+
+    function findGCD(a, b) { return b === 0 ? a : findGCD(b, a % b); }
+
+    function handleInput() {
+        let n1 = parseInt(document.getElementById('num1').value) || 1;
+        let d1 = parseInt(document.getElementById('den1').value) || 2;
+        let n2 = parseInt(document.getElementById('num2').value) || 1;
+        let d2 = parseInt(document.getElementById('den2').value) || 2;
+
+        d1 = Math.min(Math.max(d1, 2), 10);
+        d2 = Math.min(Math.max(d2, 2), 10);
+        n1 = Math.min(Math.max(n1, 1), d1);
+        n2 = Math.min(Math.max(n2, 1), d2);
+
+        document.getElementById('num1').value = n1;
+        document.getElementById('den1').value = d1;
+        document.getElementById('num2').value = n2;
+        document.getElementById('den2').value = d2;
+
+        f1 = { num: n1, den: d1 };
+        f2 = { num: n2, den: d2 };
+
+        resetAnimation();
+    }
+
+    function generateNewFractions() {
+        f1.den = Math.floor(Math.random() * 8) + 2;
+        f2.den = Math.floor(Math.random() * 8) + 2;
+        f1.num = Math.floor(Math.random() * (f1.den - 1)) + 1;
+        f2.num = Math.floor(Math.random() * (f2.den - 1)) + 1;
+
+        document.getElementById('num1').value = f1.num;
+        document.getElementById('den1').value = f1.den;
+        document.getElementById('num2').value = f2.num;
+        document.getElementById('den2').value = f2.den;
+
+        resetAnimation();
+    }
+
+    function resetAnimation() {
+        if(isPlaying) togglePlay(); 
+        document.getElementById("exploreSlider").value = 0;
+        document.getElementById("simplified-display").style.opacity = 0;
+        removeHighlights();
+        render();
+        updateAnimation();
+    }
+
+    function render() {
+        const finalNum = f1.num * f2.num;
+        const finalDen = f1.den * f2.den;
+        
+        document.getElementById("num3").innerText = finalNum;
+        document.getElementById("den3").innerText = finalDen;
+
+        const gcd = findGCD(finalNum, finalDen);
+        const simpDisplay = document.getElementById("simplified-display");
+        
+        if (gcd > 1) {
+            canSimplify = true;
+            document.getElementById("simp-num").innerText = finalNum / gcd;
+            document.getElementById("simp-den").innerText = finalDen / gcd;
+            simpDisplay.style.display = "flex";
+        } else {
+            canSimplify = false;
+            simpDisplay.style.display = "none";
+        }
+
+        const grid1 = document.getElementById("grid1");
+        const grid2 = document.getElementById("grid2");
+        const grid3 = document.getElementById("grid3");
+        
+        const borderColor = '2px solid var(--c-dark)'; 
+        
+        grid1.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`;
+        grid1.innerHTML = '';
+        for (let i = 1; i <= f1.den; i++) {
+            const cell = document.createElement("div");
+            cell.className = `grid-cell ${i <= f1.num ? 'bg-color1' : 'bg-white'}`;
+            cell.style.borderRight = (i === f1.den) ? 'none' : borderColor;
+            grid1.appendChild(cell);
+        }
+
+        grid2.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`;
+        grid2.innerHTML = '';
+        for (let i = 1; i <= f2.den; i++) {
+            const cell = document.createElement("div");
+            const isColored = i > (f2.den - f2.num);
+            cell.className = `grid-cell ${isColored ? 'bg-color2' : 'bg-white'}`;
+            cell.style.borderBottom = (i === f2.den) ? 'none' : borderColor;
+            grid2.appendChild(cell);
+        }
+
+        grid3.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`;
+        grid3.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`;
+        grid3.innerHTML = '';
+        for (let r = 1; r <= f2.den; r++) {
+            for (let c = 1; c <= f1.den; c++) {
+                const cell = document.createElement("div");
+                const isBlue = c <= f1.num;
+                const isYellow = r > (f2.den - f2.num);
+
+                if (isBlue && isYellow) cell.className = "grid-cell bg-overlap";
+                else if (isBlue && !isYellow) cell.className = "grid-cell bg-color1";
+                else if (!isBlue && isYellow) cell.className = "grid-cell bg-color2";
+                else cell.className = "grid-cell bg-white";
+                
+                cell.style.borderRight = (c === f1.den) ? 'none' : borderColor;
+                cell.style.borderBottom = (r === f2.den) ? 'none' : borderColor;
+                grid3.appendChild(cell);
+            }
+        }
+
+        document.getElementById("ghost1").style.gridTemplateColumns = grid1.style.gridTemplateColumns;
+        document.getElementById("ghost1").innerHTML = grid1.innerHTML;
+        document.getElementById("ghost2").style.gridTemplateRows = grid2.style.gridTemplateRows;
+        document.getElementById("ghost2").innerHTML = grid2.innerHTML;
+
+        requestAnimationFrame(() => requestAnimationFrame(updateAnimation));
+    }
+
+    function togglePlay() {
+        const btn = document.getElementById("playBtn");
+        const slider = document.getElementById("exploreSlider");
+
+        if (isPlaying) {
+            clearInterval(playInterval);
+            btn.innerHTML = "&#9658; PLAY";
+            isPlaying = false;
+        } else {
+            if(slider.value == 100) slider.value = 0;
+            btn.innerHTML = "&#10074;&#10074; PAUSE";
+            isPlaying = true;
+            
+            playInterval = setInterval(() => {
+                let val = parseInt(slider.value);
+                if (val >= 100) {
+                    clearInterval(playInterval);
+                    btn.innerHTML = "&#9658; PLAY";
+                    isPlaying = false;
+                    updateAnimation();
+                } else {
+                    slider.value = val + 1;
+                    updateAnimation();
+                }
+            }, 30);
+        }
+    }
+
+    function setupSlider() {
+        const slider = document.getElementById("exploreSlider");
+        slider.addEventListener("input", () => {
+            if(isPlaying) togglePlay();
+            requestAnimationFrame(updateAnimation);
+        });
+    }
+
+    function removeHighlights() {
+        ['num1','num2','num3'].forEach(id => {
+            document.getElementById(id).classList.remove('glow-num');
+        });
+        ['den1','den2','den3'].forEach(id => {
+            document.getElementById(id).classList.remove('glow-den');
+        });
+    }
+
+    function triggerHighlight() {
+        ['num1','num2','num3'].forEach(id => document.getElementById(id).classList.add('glow-num'));
+        ['den1','den2','den3'].forEach(id => document.getElementById(id).classList.add('glow-den'));
+    }
+
+    function updateAnimation() {
+        const sliderVal = parseInt(document.getElementById("exploreSlider").value);
+        const mathSec = document.getElementById("math-section").getBoundingClientRect();
+        
+        const rect1 = document.getElementById("grid1").getBoundingClientRect();
+        const rect2 = document.getElementById("grid2").getBoundingClientRect();
+        const rect3 = document.getElementById("grid3-target").getBoundingClientRect();
+
+        const startX1 = rect1.left - mathSec.left; const startY1 = rect1.top - mathSec.top;
+        const startX2 = rect2.left - mathSec.left; const startY2 = rect2.top - mathSec.top;
+        const endX = rect3.left - mathSec.left; const endY = rect3.top - mathSec.top;
+
+        const ghost1 = document.getElementById('ghost1');
+        const ghost2 = document.getElementById('ghost2');
+        const finalGrid = document.getElementById('grid3');
+        const finalFraction = document.getElementById('final-fraction');
+        const textEx = document.getElementById('explanation-text');
+        const simpText = document.getElementById('simplified-display');
+
+        ghost1.style.left = startX1 + 'px'; ghost1.style.top = startY1 + 'px';
+        ghost2.style.left = startX2 + 'px'; ghost2.style.top = startY2 + 'px';
+
+        if (sliderVal === 0) {
+            textEx.innerHTML = "Geser slider atau klik <b>PLAY</b> untuk melihat bagaimana proses perpotongan pecahan terjadi!";
+            ghost1.style.opacity = 0; ghost2.style.opacity = 0;
+            finalGrid.style.opacity = 0; finalFraction.style.opacity = 0; simpText.style.opacity = 0;
+            removeHighlights();
+        } 
+        else if (sliderVal <= 50) {
+            textEx.innerHTML = `Langkah 1: Kita ambil area yang mewakili pecahan pertama <b>(${f1.num}/${f1.den})</b>.`;
+            let progress = sliderVal / 50; 
+            ghost1.style.opacity = 0.95; 
+            ghost1.style.transform = `translate(${(endX - startX1) * progress}px, ${(endY - startY1) * progress}px)`;
+            ghost2.style.opacity = 0;
+            finalGrid.style.opacity = 0; finalFraction.style.opacity = 0; simpText.style.opacity = 0;
+            removeHighlights();
+        } 
+        else if (sliderVal < 100) {
+            textEx.innerHTML = `Langkah 2: BAM! Kita timpa menyilang dengan area pecahan kedua <b>(${f2.num}/${f2.den})</b>.`;
+            let progress = (sliderVal - 50) / 50;
+            ghost1.style.opacity = 1; ghost1.style.transform = `translate(${endX - startX1}px, ${endY - startY1}px)`;
+            ghost2.style.opacity = 0.95; ghost2.style.transform = `translate(${(endX - startX2) * progress}px, ${(endY - startY2) * progress}px)`;
+            ghost2.style.mixBlendMode = 'multiply';
+            finalGrid.style.opacity = 0; finalFraction.style.opacity = 0; simpText.style.opacity = 0;
+            removeHighlights();
+        } 
+        else {
+            let infoHasil = `HASILNYA: Kotak perpotongan (hijau). <br><b>Atas \u00D7 Atas</b> (${f1.num}\u00D7${f2.num} = ${f1.num*f2.num}), <b>Bawah \u00D7 Bawah</b> (${f1.den}\u00D7${f2.den} = ${f1.den*f2.den}).`;
+            if (canSimplify) infoHasil += " Jangan lupa disederhanakan!";
+            textEx.innerHTML = infoHasil;
+            
+            ghost1.style.opacity = 0; ghost2.style.opacity = 0;
+            finalGrid.style.opacity = 1; finalFraction.style.opacity = 1; 
+            
+            if (canSimplify) simpText.style.opacity = 1;
+            
+            triggerHighlight(); 
+        }
+    }
+</script>
+
+</body>
+</html>
