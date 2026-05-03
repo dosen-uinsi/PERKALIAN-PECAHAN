@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024">
     <title>Animasi Perkalian Pecahan Interaktif - Comic Edition</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
             --c-mathnology-bg: #CAF0F8; 
             --c-mathnology-border: #0077B6; 
 
-            /* --- SKALA UKURAN DESKTOP (LAPTOP) --- */
+            /* --- SKALA UKURAN DESKTOP (LAPTOP) MUTLAK --- */
             --grid-size: 180px;         
             --frac-row-height: 160px;   
             --gap-x: 25px;              
@@ -44,30 +44,17 @@
 
         body {
             font-family: 'Fredoka', sans-serif; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px; 
-            box-sizing: border-box;
-            
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            margin: 0; padding: 20px; box-sizing: border-box;
             background-color: var(--c-bg);
             background-image: radial-gradient(var(--c-bg-dots) 15%, transparent 16%), radial-gradient(var(--c-bg-dots) 15%, transparent 16%);
-            background-size: 24px 24px;
-            background-position: 0 0, 12px 12px;
+            background-size: 24px 24px; background-position: 0 0, 12px 12px;
         }
 
         .container {
-            background-color: var(--c-white);
-            width: 100%;
-            max-width: 980px; 
-            padding: 40px 45px;
-            border-radius: 12px;
-            border: 5px solid var(--c-dark);
-            box-shadow: 12px 12px 0px var(--c-dark); 
-            box-sizing: border-box;
-            overflow: hidden; 
+            background-color: var(--c-white); width: 100%; max-width: 980px; 
+            padding: 40px 45px; border-radius: 12px; border: 5px solid var(--c-dark);
+            box-shadow: 12px 12px 0px var(--c-dark); box-sizing: border-box; overflow: hidden; 
         }
 
         /* --- Header & Titles --- */
@@ -83,7 +70,6 @@
             100% { transform: translateY(0px) rotate(-3deg); }
         }
 
-        /* FIX: Garis luar dibuat menjadi lebih tipis (2px) */
         .main-title {
             position: relative; display: inline-block; font-family: 'Paytone One', sans-serif; 
             font-size: 56px; color: var(--c-retro-red); margin: 0;
@@ -102,8 +88,7 @@
             background-color: var(--c-comic-yellow); border: 4px solid var(--c-dark);
             box-shadow: 6px 6px 0px var(--c-dark); padding: 16px 20px; margin-bottom: 35px;
             border-radius: 8px; font-size: 20px; line-height: 1.4; font-weight: 600;
-            color: var(--c-dark); position: relative;
-            min-height: 90px; 
+            color: var(--c-dark); position: relative; min-height: 90px; 
             display: flex; align-items: center; justify-content: center; text-align: center;
         }
         
@@ -113,23 +98,14 @@
             border-color: var(--c-dark) transparent transparent transparent;
         }
 
-        /* --- WRAPPER SCROLL UNTUK HP --- */
-        .math-scroll-wrapper {
-            width: 100%; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px;
-        }
-        
-        .math-scroll-wrapper::-webkit-scrollbar { width: 10px; height: 12px; }
-        .math-scroll-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; border: 2px solid var(--c-dark); }
-        .math-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--c-blue); border-radius: 10px; border: 2px solid var(--c-dark); }
-        .math-scroll-wrapper::-webkit-scrollbar-thumb:hover { background: var(--c-primary); }
+        .math-scroll-wrapper { width: 100%; padding-bottom: 15px; margin-bottom: 25px; }
 
         /* --- Math & Visuals Section --- */
         .math-section {
             display: grid;
             grid-template-columns: var(--grid-size) auto var(--grid-size) auto var(--grid-size) auto;
             grid-template-rows: var(--frac-row-height) var(--grid-size); 
-            gap: 20px var(--gap-x); 
-            justify-content: center; align-items: center; position: relative; 
+            gap: 20px var(--gap-x); justify-content: center; align-items: center; position: relative; 
             min-width: max-content; margin: 0 auto; padding: 0 10px;
         }
 
@@ -151,22 +127,26 @@
             align-self: center; justify-self: center;
         }
 
+        .fraction-line {
+            width: 100%; min-width: 60px; height: 6px;
+            background-color: var(--c-dark); border-radius: 0; margin: 4px 0;
+        }
+
+        .num-display, .den-display {
+            display: inline-block; padding: 4px 10px; border-radius: 6px; transition: all 0.5s ease-in-out;
+        }
+
         .num-input {
             width: var(--num-w); height: var(--num-h); text-align: center;
             font-family: 'Fredoka', sans-serif; font-size: var(--num-font); font-weight: 700;
             border: 3px solid transparent; background: transparent; color: var(--c-dark);
             cursor: pointer; -moz-appearance: textfield; transition: all 0.2s ease-in-out;
-            padding: 4px 2px; box-sizing: content-box; 
+            padding: 4px 2px; box-sizing: content-box; border-radius: 8px;
         }
         
         .num-input::-webkit-outer-spin-button, .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .num-input:focus { outline: none; border: 3px solid var(--c-dark); background-color: #EBF2FF; border-radius: 8px; box-shadow: 4px 4px 0px var(--c-dark); cursor: text; transform: rotate(-3deg); }
-        .num-input:hover:not(:focus, .glow-num, .glow-den) { background-color: #f4f4f4; border-radius: 8px; }
-
-        .numerator { padding: 4px 5px 10px 5px; border-bottom: 5px solid var(--c-dark); transition: all 0.5s ease-in-out; margin-bottom: 5px; }
-        .denominator { padding: 0 5px; transition: all 0.5s ease-in-out; margin-top: 5px; }
-        span.numerator { display: inline-block; padding: 4px 10px 10px 10px; border-bottom: 5px solid var(--c-dark); margin-bottom: 5px; border-radius: 6px; }
-        span.denominator { display: inline-block; padding: 4px 10px; margin-top: 5px; border-radius: 6px; }
+        .num-input:focus { outline: none; border: 3px solid var(--c-dark); background-color: #EBF2FF; box-shadow: 4px 4px 0px var(--c-dark); cursor: text; transform: rotate(-3deg); }
+        .num-input:hover:not(:focus, .glow-num, .glow-den) { background-color: #f4f4f4; }
 
         .operator { font-size: var(--op-font); font-weight: bold; color: var(--c-dark); align-self: center; justify-self: center; z-index: 1; }
 
@@ -185,18 +165,13 @@
         .bg-overlap { background-color: var(--c-green); }
         .bg-white { background-color: var(--c-white); } 
 
-        .glow-num { background-color: var(--c-highlight-num-faded) !important; box-shadow: 0 0 10px var(--c-shadow-num); border-radius: 6px; color: var(--c-dark) !important; }
-        .glow-den { background-color: var(--c-highlight-den-faded) !important; box-shadow: 0 0 10px var(--c-shadow-den); border-radius: 6px; color: var(--c-dark) !important; }
+        .glow-num { background-color: var(--c-highlight-num-faded) !important; box-shadow: 0 0 10px var(--c-shadow-num); color: var(--c-dark) !important; }
+        .glow-den { background-color: var(--c-highlight-den-faded) !important; box-shadow: 0 0 10px var(--c-shadow-den); color: var(--c-dark) !important; }
 
         .ghost { position: absolute; top: 0; left: 0; pointer-events: none; opacity: 0; z-index: 10; will-change: transform, opacity; box-shadow: 8px 8px 0px rgba(0,0,0,0.5); }
 
-        .simplify-group { 
-            display: flex; align-items: center; justify-content: flex-start;
-            gap: 15px; opacity: 0; transition: opacity 0.5s ease-in-out; color: var(--c-dark); 
-            min-width: 140px; 
-        }
+        .simplify-group { display: flex; align-items: center; justify-content: flex-start; gap: 15px; opacity: 0; transition: opacity 0.5s ease-in-out; color: var(--c-dark); min-width: 140px; }
         .simplify-group .fraction { color: var(--c-dark); }
-        .simplify-group .numerator { border-bottom-color: var(--c-dark); }
 
         /* --- Controls Section --- */
         .controls-section { display: flex; flex-direction: column; gap: 15px; }
@@ -221,53 +196,11 @@
         .btn:active { transform: translate(5px, 5px); box-shadow: 0px 0px 0px var(--c-dark); }
         .btn-play { background-color: var(--c-play); color: var(--c-dark); }
         .btn-play:hover { background-color: #05B586; }
-
-
-        /* =======================================================
-           RESPONSIVITAS UNTUK TABLET & HP
-           ======================================================= */
-        @media (max-width: 800px) {
-            :root {
-                --grid-size: 110px;         
-                --frac-row-height: 110px;   
-                --gap-x: 12px;              
-                --num-w: 55px;              
-                --num-h: 40px;              
-                --num-font: 28px;           
-                --op-font: 32px;            
-            }
-            .container { padding: 25px 15px; }
-            /* Penyesuaian garis luar menjadi lebih tipis di Tablet */
-            .main-title { font-size: 38px; letter-spacing: 1px; -webkit-text-stroke: 1.5px var(--c-dark); }
-            .explanation-box { font-size: 16px; padding: 12px 15px; margin-bottom: 25px; min-height: 100px; }
-            .explanation-box::after { bottom: -10px; left: 30px; border-width: 10px 10px 0 0; }
-            .simplify-group { min-width: auto; min-height: 70px; justify-content: center; } 
-        }
-
-        @media (max-width: 450px) {
-            :root {
-                --grid-size: 85px;         
-                --frac-row-height: 95px;   
-                --gap-x: 8px;              
-                --num-w: 45px;              
-                --num-h: 30px;              
-                --num-font: 24px;           
-                --op-font: 28px;            
-            }
-            /* Penyesuaian garis luar sangat tipis di ukuran layar HP paling kecil */
-            .main-title { font-size: 30px; -webkit-text-stroke: 1px var(--c-dark); }
-            .sub-title { font-size: 14px; }
-            .icon-container { width: 50px; height: 50px; }
-            .explanation-box { min-height: 120px; }
-            .btn { padding: 10px 16px; font-size: 18px; }
-            .simplify-group { min-height: 60px; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    
     <div class="header-section">
         <div class="title-wrapper">
             <div class="icon-container">
@@ -288,8 +221,9 @@
         <div class="math-section" id="math-section">
             
             <div class="fraction item-frac1">
-                <input type="number" class="num-input numerator" id="num1" value="3" min="1" max="10" onchange="handleInput()">
-                <input type="number" class="num-input denominator" id="den1" value="9" min="2" max="10" onchange="handleInput()">
+                <input type="number" class="num-input" id="num1" value="3" min="1" max="10" onchange="handleInput()">
+                <div class="fraction-line"></div>
+                <input type="number" class="num-input" id="den1" value="9" min="2" max="10" onchange="handleInput()">
             </div>
             <div class="grid-container item-grid1" id="grid1"></div>
 
@@ -297,8 +231,9 @@
             <div class="operator operator-grid item-op-mul2">&#215;</div>
 
             <div class="fraction item-frac2">
-                <input type="number" class="num-input numerator" id="num2" value="5" min="1" max="10" onchange="handleInput()">
-                <input type="number" class="num-input denominator" id="den2" value="6" min="2" max="10" onchange="handleInput()">
+                <input type="number" class="num-input" id="num2" value="5" min="1" max="10" onchange="handleInput()">
+                <div class="fraction-line"></div>
+                <input type="number" class="num-input" id="den2" value="6" min="2" max="10" onchange="handleInput()">
             </div>
             <div class="grid-container item-grid2" id="grid2"></div>
 
@@ -306,8 +241,9 @@
             <div class="operator operator-grid item-op-eq2">=</div>
 
             <div class="fraction item-frac3" id="final-fraction">
-                <span class="numerator" id="num3">15</span>
-                <span class="denominator" id="den3">54</span>
+                <span class="num-display" id="num3">15</span>
+                <div class="fraction-line"></div>
+                <span class="den-display" id="den3">54</span>
             </div>
             <div class="item-grid3">
                 <div class="grid-container grid-target" id="grid3-target" style="position: absolute; top:0; left:0; width:100%; height:100%;"></div>
@@ -317,8 +253,9 @@
             <div class="simplify-group item-simp" id="simplified-display">
                 <div class="operator" style="margin-top: -10px;">=&nbsp;</div>
                 <div class="fraction">
-                    <span class="numerator" id="simp-num">5</span>
-                    <span class="denominator" id="simp-den">18</span>
+                    <span class="num-display" id="simp-num">5</span>
+                    <div class="fraction-line"></div>
+                    <span class="den-display" id="simp-den">18</span>
                 </div>
             </div>
 
@@ -339,17 +276,62 @@
 </div>
 
 <script>
+    // ==========================================
+    // SISTEM AUDIO & GETAR (SFX & HAPTIC)
+    // ==========================================
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type, duration, vol = 0.1) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+
+    const sfx = {
+        pop: () => playTone(800, 'sine', 0.1, 0.05),        
+        click: () => playTone(300, 'triangle', 0.1, 0.1),   
+        step1: () => playTone(400, 'sine', 0.15, 0.08),     
+        step2: () => playTone(500, 'sine', 0.15, 0.08),     
+        success: () => {                                    
+            playTone(523.25, 'sine', 0.15, 0.1); 
+            setTimeout(() => playTone(659.25, 'sine', 0.15, 0.1), 150); 
+            setTimeout(() => playTone(783.99, 'sine', 0.4, 0.1), 300); 
+        }
+    };
+
+    const vibe = {
+        short: () => { if (navigator.vibrate) navigator.vibrate(20); },
+        medium: () => { if (navigator.vibrate) navigator.vibrate(50); },
+        success: () => { if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]); }
+    };
+
+    // ==========================================
+    // LOGIKA APLIKASI
+    // ==========================================
     let f1 = { num: 3, den: 9 };
     let f2 = { num: 5, den: 6 };
     let playInterval;
     let isPlaying = false;
     let canSimplify = false;
+    let animationPhase = 0; 
 
     window.onload = () => {
         render();
         setupSlider();
         initPieChartIcon(); 
         window.addEventListener('resize', () => requestAnimationFrame(updateAnimation));
+        
+        document.body.addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }, { once: true });
     };
 
     function initPieChartIcon() {
@@ -363,12 +345,9 @@
         let targetAngles = [...currentAngles];
 
         function getArcPath(cx, cy, r, a1, a2) {
-            let rad1 = a1 * Math.PI / 180;
-            let rad2 = a2 * Math.PI / 180;
-            let x1 = cx + r * Math.cos(rad1);
-            let y1 = cy + r * Math.sin(rad1);
-            let x2 = cx + r * Math.cos(rad2);
-            let y2 = cy + r * Math.sin(rad2);
+            let rad1 = a1 * Math.PI / 180; let rad2 = a2 * Math.PI / 180;
+            let x1 = cx + r * Math.cos(rad1); let y1 = cy + r * Math.sin(rad1);
+            let x2 = cx + r * Math.cos(rad2); let y2 = cy + r * Math.sin(rad2);
             let largeArc = (a2 - a1) > 180 ? 1 : 0;
             return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
         }
@@ -377,12 +356,8 @@
             const svg = document.getElementById('piechart');
             if(!svg) return;
             svg.innerHTML = ''; 
-            
             for (let i = 0; i < 3; i++) {
-                let start = currentAngles[i];
-                let end = currentAngles[i+1];
-                let mid = (start + end) / 2;
-                
+                let start = currentAngles[i]; let end = currentAngles[i+1]; let mid = (start + end) / 2;
                 let explodeDistance = 12;
                 let tx = explodeDistance * Math.cos(mid * Math.PI / 180);
                 let ty = explodeDistance * Math.sin(mid * Math.PI / 180);
@@ -400,34 +375,22 @@
                 
                 let stroke = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 stroke.setAttribute('d', getArcPath(0, 0, 100, start, end));
-                stroke.setAttribute('fill', 'none');
-                stroke.setAttribute('stroke', '#000000'); 
-                stroke.setAttribute('stroke-width', '10');
-                stroke.setAttribute('stroke-linejoin', 'round');
-                stroke.setAttribute('stroke-linecap', 'round');
+                stroke.setAttribute('fill', 'none'); stroke.setAttribute('stroke', '#000000'); 
+                stroke.setAttribute('stroke-width', '10'); stroke.setAttribute('stroke-linejoin', 'round'); stroke.setAttribute('stroke-linecap', 'round');
 
-                g.appendChild(base);
-                g.appendChild(shadow);
-                g.appendChild(stroke);
+                g.appendChild(base); g.appendChild(shadow); g.appendChild(stroke);
 
-                let hStart = start + 12;
-                let hEnd = end - 12;
+                let hStart = start + 12; let hEnd = end - 12;
                 if (hEnd > hStart) {
                     let highlight = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    let hx1 = 75 * Math.cos(hStart * Math.PI / 180);
-                    let hy1 = 75 * Math.sin(hStart * Math.PI / 180);
-                    let hx2 = 75 * Math.cos(hEnd * Math.PI / 180);
-                    let hy2 = 75 * Math.sin(hEnd * Math.PI / 180);
+                    let hx1 = 75 * Math.cos(hStart * Math.PI / 180); let hy1 = 75 * Math.sin(hStart * Math.PI / 180);
+                    let hx2 = 75 * Math.cos(hEnd * Math.PI / 180); let hy2 = 75 * Math.sin(hEnd * Math.PI / 180);
                     let hLarge = (hEnd - hStart) > 180 ? 1 : 0;
-                    
                     highlight.setAttribute('d', `M ${hx1} ${hy1} A 75 75 0 ${hLarge} 1 ${hx2} ${hy2}`);
-                    highlight.setAttribute('fill', 'none');
-                    highlight.setAttribute('stroke', '#FFFFFF');
-                    highlight.setAttribute('stroke-width', '6');
-                    highlight.setAttribute('stroke-linecap', 'round');
+                    highlight.setAttribute('fill', 'none'); highlight.setAttribute('stroke', '#FFFFFF');
+                    highlight.setAttribute('stroke-width', '6'); highlight.setAttribute('stroke-linecap', 'round');
                     g.appendChild(highlight);
                 }
-
                 svg.appendChild(g);
             }
         }
@@ -436,36 +399,20 @@
             let isChanging = false;
             for(let i = 0; i < 4; i++) { 
                  let diff = targetAngles[i] - currentAngles[i];
-                 if (Math.abs(diff) > 0.1) {
-                     currentAngles[i] += diff * 0.05; 
-                     isChanging = true;
-                 } else {
-                     currentAngles[i] = targetAngles[i];
-                 }
+                 if (Math.abs(diff) > 0.1) { currentAngles[i] += diff * 0.05; isChanging = true; } 
+                 else { currentAngles[i] = targetAngles[i]; }
             }
-            renderIcon();
-            requestAnimationFrame(animatePie);
+            renderIcon(); requestAnimationFrame(animatePie);
         }
 
         setInterval(() => {
-            let w1 = Math.random() + 0.3;
-            let w2 = Math.random() + 0.3;
-            let w3 = Math.random() + 0.3;
+            let w1 = Math.random() + 0.3; let w2 = Math.random() + 0.3; let w3 = Math.random() + 0.3;
             let totalWeight = w1 + w2 + w3;
-            
-            let angle1 = (w1 / totalWeight) * 360;
-            let angle2 = (w2 / totalWeight) * 360;
-            let angle3 = (w3 / totalWeight) * 360;
-            
+            let angle1 = (w1 / totalWeight) * 360; let angle2 = (w2 / totalWeight) * 360; let angle3 = (w3 / totalWeight) * 360;
             let globalRotation = Math.random() * 90; 
-            
             let newStart = targetAngles[0] + globalRotation;
-            
-            targetAngles[0] = newStart;
-            targetAngles[1] = newStart + angle1;
-            targetAngles[2] = newStart + angle1 + angle2;
-            targetAngles[3] = newStart + 360;
-
+            targetAngles[0] = newStart; targetAngles[1] = newStart + angle1;
+            targetAngles[2] = newStart + angle1 + angle2; targetAngles[3] = newStart + 360;
         }, 2500);
 
         animatePie();
@@ -474,37 +421,33 @@
     function findGCD(a, b) { return b === 0 ? a : findGCD(b, a % b); }
 
     function handleInput() {
+        sfx.pop(); 
+        vibe.short();
+
         let n1 = parseInt(document.getElementById('num1').value) || 1;
         let d1 = parseInt(document.getElementById('den1').value) || 2;
         let n2 = parseInt(document.getElementById('num2').value) || 1;
         let d2 = parseInt(document.getElementById('den2').value) || 2;
 
-        d1 = Math.min(Math.max(d1, 2), 10);
-        d2 = Math.min(Math.max(d2, 2), 10);
-        n1 = Math.min(Math.max(n1, 1), d1);
-        n2 = Math.min(Math.max(n2, 1), d2);
+        d1 = Math.min(Math.max(d1, 2), 10); d2 = Math.min(Math.max(d2, 2), 10);
+        n1 = Math.min(Math.max(n1, 1), d1); n2 = Math.min(Math.max(n2, 1), d2);
 
-        document.getElementById('num1').value = n1;
-        document.getElementById('den1').value = d1;
-        document.getElementById('num2').value = n2;
-        document.getElementById('den2').value = d2;
+        document.getElementById('num1').value = n1; document.getElementById('den1').value = d1;
+        document.getElementById('num2').value = n2; document.getElementById('den2').value = d2;
 
-        f1 = { num: n1, den: d1 };
-        f2 = { num: n2, den: d2 };
-
+        f1 = { num: n1, den: d1 }; f2 = { num: n2, den: d2 };
         resetAnimation();
     }
 
     function generateNewFractions() {
-        f1.den = Math.floor(Math.random() * 8) + 2;
-        f2.den = Math.floor(Math.random() * 8) + 2;
-        f1.num = Math.floor(Math.random() * (f1.den - 1)) + 1;
-        f2.num = Math.floor(Math.random() * (f2.den - 1)) + 1;
+        sfx.click(); 
+        vibe.medium();
 
-        document.getElementById('num1').value = f1.num;
-        document.getElementById('den1').value = f1.den;
-        document.getElementById('num2').value = f2.num;
-        document.getElementById('den2').value = f2.den;
+        f1.den = Math.floor(Math.random() * 8) + 2; f2.den = Math.floor(Math.random() * 8) + 2;
+        f1.num = Math.floor(Math.random() * (f1.den - 1)) + 1; f2.num = Math.floor(Math.random() * (f2.den - 1)) + 1;
+
+        document.getElementById('num1').value = f1.num; document.getElementById('den1').value = f1.den;
+        document.getElementById('num2').value = f2.num; document.getElementById('den2').value = f2.den;
 
         resetAnimation();
     }
@@ -513,63 +456,47 @@
         if(isPlaying) togglePlay(); 
         document.getElementById("exploreSlider").value = 0;
         document.getElementById("simplified-display").style.opacity = 0;
+        animationPhase = 0;
         removeHighlights();
         render();
         updateAnimation();
     }
 
     function render() {
-        const finalNum = f1.num * f2.num;
-        const finalDen = f1.den * f2.den;
-        
-        document.getElementById("num3").innerText = finalNum;
-        document.getElementById("den3").innerText = finalDen;
-
+        const finalNum = f1.num * f2.num; const finalDen = f1.den * f2.den;
+        document.getElementById("num3").innerText = finalNum; document.getElementById("den3").innerText = finalDen;
         const gcd = findGCD(finalNum, finalDen);
         
         if (gcd > 1) {
             canSimplify = true;
             document.getElementById("simp-num").innerText = finalNum / gcd;
             document.getElementById("simp-den").innerText = finalDen / gcd;
-        } else {
-            canSimplify = false;
-        }
+        } else { canSimplify = false; }
 
-        const grid1 = document.getElementById("grid1");
-        const grid2 = document.getElementById("grid2");
-        const grid3 = document.getElementById("grid3");
+        const grid1 = document.getElementById("grid1"); const grid2 = document.getElementById("grid2"); const grid3 = document.getElementById("grid3");
         
-        grid1.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`;
-        grid1.innerHTML = '';
+        grid1.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`; grid1.innerHTML = '';
         for (let i = 1; i <= f1.den; i++) {
             const cell = document.createElement("div");
-            cell.className = `grid-cell ${i <= f1.num ? 'bg-color1' : 'bg-white'}`;
-            grid1.appendChild(cell);
+            cell.className = `grid-cell ${i <= f1.num ? 'bg-color1' : 'bg-white'}`; grid1.appendChild(cell);
         }
 
-        grid2.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`;
-        grid2.innerHTML = '';
+        grid2.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`; grid2.innerHTML = '';
         for (let i = 1; i <= f2.den; i++) {
             const cell = document.createElement("div");
             const isColored = i > (f2.den - f2.num);
-            cell.className = `grid-cell ${isColored ? 'bg-color2' : 'bg-white'}`;
-            grid2.appendChild(cell);
+            cell.className = `grid-cell ${isColored ? 'bg-color2' : 'bg-white'}`; grid2.appendChild(cell);
         }
 
-        grid3.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`;
-        grid3.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`;
-        grid3.innerHTML = '';
+        grid3.style.gridTemplateColumns = `repeat(${f1.den}, 1fr)`; grid3.style.gridTemplateRows = `repeat(${f2.den}, 1fr)`; grid3.innerHTML = '';
         for (let r = 1; r <= f2.den; r++) {
             for (let c = 1; c <= f1.den; c++) {
                 const cell = document.createElement("div");
-                const isBlue = c <= f1.num;
-                const isYellow = r > (f2.den - f2.num);
-
+                const isBlue = c <= f1.num; const isYellow = r > (f2.den - f2.num);
                 if (isBlue && isYellow) cell.className = "grid-cell bg-overlap";
                 else if (isBlue && !isYellow) cell.className = "grid-cell bg-color1";
                 else if (!isBlue && isYellow) cell.className = "grid-cell bg-color2";
                 else cell.className = "grid-cell bg-white";
-                
                 grid3.appendChild(cell);
             }
         }
@@ -583,28 +510,21 @@
     }
 
     function togglePlay() {
-        const btn = document.getElementById("playBtn");
-        const slider = document.getElementById("exploreSlider");
+        sfx.click(); vibe.medium();
+        const btn = document.getElementById("playBtn"); const slider = document.getElementById("exploreSlider");
 
         if (isPlaying) {
-            clearInterval(playInterval);
-            btn.innerHTML = "&#9658; PLAY";
-            isPlaying = false;
+            clearInterval(playInterval); btn.innerHTML = "&#9658; PLAY"; isPlaying = false;
         } else {
-            if(slider.value == 100) slider.value = 0;
-            btn.innerHTML = "&#10074;&#10074; PAUSE";
-            isPlaying = true;
+            if(slider.value == 100) { slider.value = 0; animationPhase = 0; }
+            btn.innerHTML = "&#10074;&#10074; PAUSE"; isPlaying = true;
             
             playInterval = setInterval(() => {
                 let val = parseInt(slider.value);
                 if (val >= 100) {
-                    clearInterval(playInterval);
-                    btn.innerHTML = "&#9658; PLAY";
-                    isPlaying = false;
-                    updateAnimation();
+                    clearInterval(playInterval); btn.innerHTML = "&#9658; PLAY"; isPlaying = false; updateAnimation();
                 } else {
-                    slider.value = val + 1;
-                    updateAnimation();
+                    slider.value = val + 1; updateAnimation();
                 }
             }, 30);
         }
@@ -619,12 +539,8 @@
     }
 
     function removeHighlights() {
-        ['num1','num2','num3'].forEach(id => {
-            document.getElementById(id).classList.remove('glow-num');
-        });
-        ['den1','den2','den3'].forEach(id => {
-            document.getElementById(id).classList.remove('glow-den');
-        });
+        ['num1','num2','num3'].forEach(id => document.getElementById(id).classList.remove('glow-num'));
+        ['den1','den2','den3'].forEach(id => document.getElementById(id).classList.remove('glow-den'));
     }
 
     function triggerHighlight() {
@@ -644,15 +560,24 @@
         const startX2 = rect2.left - mathSec.left; const startY2 = rect2.top - mathSec.top;
         const endX = rect3.left - mathSec.left; const endY = rect3.top - mathSec.top;
 
-        const ghost1 = document.getElementById('ghost1');
-        const ghost2 = document.getElementById('ghost2');
-        const finalGrid = document.getElementById('grid3');
-        const finalFraction = document.getElementById('final-fraction');
-        const textEx = document.getElementById('explanation-text');
-        const simpText = document.getElementById('simplified-display');
+        const ghost1 = document.getElementById('ghost1'); const ghost2 = document.getElementById('ghost2');
+        const finalGrid = document.getElementById('grid3'); const finalFraction = document.getElementById('final-fraction');
+        const textEx = document.getElementById('explanation-text'); const simpText = document.getElementById('simplified-display');
 
         ghost1.style.left = startX1 + 'px'; ghost1.style.top = startY1 + 'px';
         ghost2.style.left = startX2 + 'px'; ghost2.style.top = startY2 + 'px';
+
+        let currentPhase = 0;
+        if (sliderVal > 0 && sliderVal <= 50) currentPhase = 1;
+        else if (sliderVal > 50 && sliderVal < 100) currentPhase = 2;
+        else if (sliderVal === 100) currentPhase = 3;
+
+        if (currentPhase !== animationPhase) {
+            if (currentPhase === 1) { sfx.step1(); vibe.short(); }
+            else if (currentPhase === 2) { sfx.step2(); vibe.short(); }
+            else if (currentPhase === 3) { sfx.success(); vibe.success(); }
+            animationPhase = currentPhase;
+        }
 
         if (sliderVal === 0) {
             textEx.innerHTML = "Geser slider atau klik <b>PLAY</b> untuk melihat bagaimana proses perpotongan pecahan terjadi!";
@@ -685,9 +610,7 @@
             
             ghost1.style.opacity = 0; ghost2.style.opacity = 0;
             finalGrid.style.opacity = 1; finalFraction.style.opacity = 1; 
-            
             if (canSimplify) simpText.style.opacity = 1;
-            
             triggerHighlight(); 
         }
     }
