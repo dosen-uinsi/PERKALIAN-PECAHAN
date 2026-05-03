@@ -15,12 +15,8 @@
             --c-blue: #48CAE4;    
             --c-yellow: #FFD166;  
             --c-green: #48A65B;   
-            
-            /* FIX: Opasitas highlight ditingkatkan dari 0.2 menjadi 0.6 agar warnanya solid */
             --c-highlight-num-faded: rgba(255, 209, 102, 0.6); 
             --c-highlight-den-faded: rgba(239, 71, 111, 0.6);  
-            
-            /* FIX: Bayangan highlight juga dibuat lebih solid (0.6) */
             --c-shadow-num: rgba(255, 209, 102, 0.6);
             --c-shadow-den: rgba(239, 71, 111, 0.6);
 
@@ -87,11 +83,12 @@
             100% { transform: translateY(0px) rotate(-3deg); }
         }
 
+        /* FIX: Garis luar dibuat menjadi lebih tipis (2px) */
         .main-title {
             position: relative; display: inline-block; font-family: 'Paytone One', sans-serif; 
             font-size: 56px; color: var(--c-retro-red); margin: 0;
             letter-spacing: 3px; text-transform: uppercase; z-index: 2;
-            text-shadow: 6px 6px 0px var(--c-dark); 
+            -webkit-text-stroke: 2px var(--c-dark); 
         }
 
         .sub-title {
@@ -106,6 +103,8 @@
             box-shadow: 6px 6px 0px var(--c-dark); padding: 16px 20px; margin-bottom: 35px;
             border-radius: 8px; font-size: 20px; line-height: 1.4; font-weight: 600;
             color: var(--c-dark); position: relative;
+            min-height: 90px; 
+            display: flex; align-items: center; justify-content: center; text-align: center;
         }
         
         .explanation-box::after {
@@ -116,10 +115,7 @@
 
         /* --- WRAPPER SCROLL UNTUK HP --- */
         .math-scroll-wrapper {
-            width: 100%;
-            overflow-x: auto; 
-            padding-bottom: 15px; 
-            margin-bottom: 25px;
+            width: 100%; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px;
         }
         
         .math-scroll-wrapper::-webkit-scrollbar { width: 10px; height: 12px; }
@@ -133,12 +129,8 @@
             grid-template-columns: var(--grid-size) auto var(--grid-size) auto var(--grid-size) auto;
             grid-template-rows: var(--frac-row-height) var(--grid-size); 
             gap: 20px var(--gap-x); 
-            justify-content: center;
-            align-items: center;
-            position: relative; 
-            min-width: max-content; 
-            margin: 0 auto;
-            padding: 0 10px;
+            justify-content: center; align-items: center; position: relative; 
+            min-width: max-content; margin: 0 auto; padding: 0 10px;
         }
 
         .item-frac1   { grid-column: 1; grid-row: 1; }
@@ -181,21 +173,13 @@
         .grid-container {
             width: var(--grid-size); height: var(--grid-size); 
             border: 4px solid var(--c-dark); box-sizing: border-box;
-            background-color: var(--c-dark); 
-            gap: 2px; 
+            background-color: var(--c-dark); gap: 2px; 
             display: grid; justify-self: center;
             overflow: hidden; box-shadow: 6px 6px 0px var(--c-dark); 
         }
 
         .grid-cell { box-sizing: border-box; }
-        
-        .grid-target { 
-            border: 4px dashed #999; 
-            background-color: transparent; 
-            gap: 0; 
-            box-shadow: none; 
-        }
-
+        .grid-target { border: 4px dashed #999; background-color: transparent; gap: 0; box-shadow: none; }
         .bg-color1 { background-color: var(--c-blue); }
         .bg-color2 { background-color: var(--c-yellow); }
         .bg-overlap { background-color: var(--c-green); }
@@ -206,7 +190,11 @@
 
         .ghost { position: absolute; top: 0; left: 0; pointer-events: none; opacity: 0; z-index: 10; will-change: transform, opacity; box-shadow: 8px 8px 0px rgba(0,0,0,0.5); }
 
-        .simplify-group { display: flex; align-items: center; gap: 15px; opacity: 0; transition: opacity 0.5s ease-in-out; color: var(--c-dark); }
+        .simplify-group { 
+            display: flex; align-items: center; justify-content: flex-start;
+            gap: 15px; opacity: 0; transition: opacity 0.5s ease-in-out; color: var(--c-dark); 
+            min-width: 140px; 
+        }
         .simplify-group .fraction { color: var(--c-dark); }
         .simplify-group .numerator { border-bottom-color: var(--c-dark); }
 
@@ -231,7 +219,6 @@
         }
         .btn:hover { background-color: #FF144A; transform: translate(-2px, -2px); box-shadow: 7px 7px 0px var(--c-dark); }
         .btn:active { transform: translate(5px, 5px); box-shadow: 0px 0px 0px var(--c-dark); }
-        
         .btn-play { background-color: var(--c-play); color: var(--c-dark); }
         .btn-play:hover { background-color: #05B586; }
 
@@ -250,9 +237,11 @@
                 --op-font: 32px;            
             }
             .container { padding: 25px 15px; }
-            .main-title { font-size: 38px; letter-spacing: 1px; text-shadow: 4px 4px 0px var(--c-dark); }
-            .explanation-box { font-size: 16px; padding: 12px 15px; margin-bottom: 25px; }
+            /* Penyesuaian garis luar menjadi lebih tipis di Tablet */
+            .main-title { font-size: 38px; letter-spacing: 1px; -webkit-text-stroke: 1.5px var(--c-dark); }
+            .explanation-box { font-size: 16px; padding: 12px 15px; margin-bottom: 25px; min-height: 100px; }
             .explanation-box::after { bottom: -10px; left: 30px; border-width: 10px 10px 0 0; }
+            .simplify-group { min-width: auto; min-height: 70px; justify-content: center; } 
         }
 
         @media (max-width: 450px) {
@@ -265,10 +254,13 @@
                 --num-font: 24px;           
                 --op-font: 28px;            
             }
-            .main-title { font-size: 30px; text-shadow: 3px 3px 0px var(--c-dark); }
+            /* Penyesuaian garis luar sangat tipis di ukuran layar HP paling kecil */
+            .main-title { font-size: 30px; -webkit-text-stroke: 1px var(--c-dark); }
             .sub-title { font-size: 14px; }
             .icon-container { width: 50px; height: 50px; }
+            .explanation-box { min-height: 120px; }
             .btn { padding: 10px 16px; font-size: 18px; }
+            .simplify-group { min-height: 60px; }
         }
     </style>
 </head>
@@ -286,8 +278,10 @@
         <h2 class="sub-title">By Mathnology</h2>
     </div>
 
-    <div class="explanation-box" id="explanation-text">
-        Masukkan angka (maks 10), lalu klik Play atau geser slider untuk melihat prosesnya!
+    <div class="explanation-box">
+        <div id="explanation-text" style="width: 100%;">
+            Masukkan angka (maks 10), lalu klik Play atau geser slider untuk melihat prosesnya!
+        </div>
     </div>
 
     <div class="math-scroll-wrapper">
@@ -532,16 +526,13 @@
         document.getElementById("den3").innerText = finalDen;
 
         const gcd = findGCD(finalNum, finalDen);
-        const simpDisplay = document.getElementById("simplified-display");
         
         if (gcd > 1) {
             canSimplify = true;
             document.getElementById("simp-num").innerText = finalNum / gcd;
             document.getElementById("simp-den").innerText = finalDen / gcd;
-            simpDisplay.style.display = "flex";
         } else {
             canSimplify = false;
-            simpDisplay.style.display = "none";
         }
 
         const grid1 = document.getElementById("grid1");
